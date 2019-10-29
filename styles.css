@@ -85,3 +85,9 @@ div#lives{
     font-size: 16px; 
 }
 
+div#refresh{
+    font-family: 'Staatliches', cursive;
+    color: white; 
+    font-size: 40px;
+    margin: 30px;
+}

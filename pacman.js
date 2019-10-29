@@ -4,15 +4,14 @@ var lives = 3;
 var pacman = document.getElementById('pacman'); 
 var ghost = document.getElementById('ghost'); 
 
-
 var pacmanPos = {
     x: 1,
     y: 1
 };
 
 var ghostPos = {
-    x:12,
-    y:9
+    x:7,
+    y:5
 };
 
 var world = [
@@ -100,7 +99,7 @@ function updateScore(){
 document.onkeydown = function(e){
     if(e.keyCode == 37 && world[pacmanPos.y][pacmanPos.x -1] != 2 && pacmanPos.x > 0){
         pacmanPos.x -= 1; 
-        pacman.style.backgroundImage= "url('pacman_left.gif')";       
+        pacman.style.backgroundImage= "url('pacman_left.gif')";
     }
     else if(e.keyCode == 39 && world[pacmanPos.y][pacmanPos.x + 1] != 2 && pacmanPos.x > 0){
         pacmanPos.x += 1; 
@@ -115,12 +114,48 @@ document.onkeydown = function(e){
         pacman.style.backgroundImage= "url('pacman_down.gif')";
     }
 
+    livesLost();
     updateScore();
     displayPacMan();
     displayLives();
 }
+// Pacman losing - lives lost
+function livesLost(){
+    if (pacmanPos.y == ghostPos.y && pacmanPos.x == ghostPos.x){
+        lives--;
+        pacmanPos.x = 1
+        pacmanPos.y = 1;
+    }
+    if(lives == 0){
+        document.getElementById("world").innerHTML = "<div id='refresh'>You lost! Try Again!</div>";
+        pacman.style.display="none";
+        ghost.style.display="none";
+        setTimeout(function(){
+            location.reload()
+        }, 3000);
+    }
+}
+// Ghost random movement
+function ghostMovement(){
+    var move = Math.floor(Math.random() * 4) + 1;
+    if (move == 1 && world[ghostPos.y][ghostPos.x - 1] != 2 && ghostPos.y > 0){
+        ghostPos.x--;
+    }
+    else if (move == 2 && world[ghostPos.y][ghostPos.x + 1] != 2 && ghostPos.y > 0){
+        ghostPos.x++;
+    }
+    else if (move == 3 && world[ghostPos.y - 1][ghostPos.x] != 2 && ghostPos.y > 0){
+        ghostPos.y--;
+    }
+    else if (move == 4 && world[ghostPos.y - 1][ghostPos.x] != 2 && ghostPos.y > 0){
+        ghostPos.y--;
+    }
+}
 
-
+setInterval(function(){
+    ghostMovement();
+    displayGhost();
+}, 750);
 
 //Running the game
 function runGame(){
