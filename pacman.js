@@ -1,12 +1,20 @@
-var score = 0; 
-var lives = 3;
+var scoreOne = 0; 
+var scoreTwo = 0; 
+var livesOne = 3;
+var livesTwo = 3;
 
-var pacman = document.getElementById('pacman'); 
+var pacmanOne = document.getElementById('pacmanOne');
+var pacmanTwo = document.getElementById('pacmanTwo'); 
 var ghost = document.getElementById('ghost'); 
 
-var pacmanPos = {
+var pacmanOnePos = {
     x: 1,
     y: 1
+};
+
+var pacmanTwoPos = {
+    x: 13,
+    y: 10
 };
 
 var ghostPos = {
@@ -25,7 +33,9 @@ var world = [
     [2,3,1,2,1,2,1,1,1,1,1,2,3,1,2],
     [2,1,1,1,1,1,1,1,1,1,1,2,1,1,2],
     [2,1,1,1,1,1,1,1,1,1,1,3,1,1,2],
-    [2,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+    [2,1,1,1,3,1,2,2,2,1,1,1,1,0,2],
+    [2,1,1,1,1,1,2,1,2,2,2,1,1,1,2],
+    [2,1,3,1,1,1,2,1,1,1,3,1,1,1,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
 ];
 
@@ -34,7 +44,7 @@ var world = [
 // 2: brick
 // 3: cherries
 
-//Drawing/Display world, pacman, and score
+//Drawing/Display world
 
 function displayWorld(){
     var output ='';
@@ -61,74 +71,137 @@ function displayWorld(){
     document.getElementById("world").innerHTML = output; 
 }
 
+//Display both P1 and P2
 function displayPacMan(){
-    pacman.style.top = pacmanPos.y*20+"px";
-    pacman.style.left = pacmanPos.x*20+"px";
+    pacmanOne.style.top = pacmanOnePos.y*20+"px";
+    pacmanOne.style.left = pacmanOnePos.x*20+"px";
+    pacmanTwo.style.top = pacmanTwoPos.y*20+"px";
+    pacmanTwo.style.left = pacmanTwoPos.x*20+"px";
 }
-
+//Display ghost
 function displayGhost(){
     ghost.style.top = ghostPos.y*20+"px";
     ghost.style.left = ghostPos.x*20+"px";
 }
-
-function displayScore(){
-    document.getElementById('score').textContent = "Score: " + score;
+//Display score for P1 and P2
+function displayScoreP1(){
+    document.getElementById('playerOneScore').textContent = "Player 1 Score: " + scoreOne;
+}
+function displayScoreP2(){
+    document.getElementById('playerTwoScore').textContent = "Player 2 Score: " + scoreTwo;
 }
 
-function displayLives(){
-    document.getElementById('lives').textContent = "Lives: " + lives;
+//Display lives for P1 and P2
+function displayLivesP1(){
+    document.getElementById('livesOne').textContent = "Player 1 Lives: " + livesOne;
+}
+function displayLivesP2(){
+    document.getElementById('livesTwo').textContent = "Player 2 Lives: " + livesTwo;
 }
 
-//Score update
-function updateScore(){
-    if(world[pacmanPos.y][pacmanPos.x] == 1){
-        world[pacmanPos.y][pacmanPos.x] = 0;
-        score += 10; 
+//Score update for P1 and P2
+function updateScoreP1(){
+    if(world[pacmanOnePos.y][pacmanOnePos.x] == 1){
+        world[pacmanOnePos.y][pacmanOnePos.x] = 0;
+        scoreOne += 10; 
         displayWorld();
-        displayScore();
+        displayScoreP1();
     }
-    else if(world[pacmanPos.y][pacmanPos.x] == 3){
-        world[pacmanPos.y][pacmanPos.x] = 0;
-        score += 50; 
+    else if(world[pacmanOnePos.y][pacmanOnePos.x] == 3){
+        world[pacmanOnePos.y][pacmanOnePos.x] = 0;
+        scoreOne += 50; 
         displayWorld();
-        displayScore();
+        displayScoreP1();
+    }
+}
+function updateScoreP2(){
+    if(world[pacmanTwoPos.y][pacmanTwoPos.x] == 1){
+        world[pacmanTwoPos.y][pacmanTwoPos.x] = 0;
+        scoreTwo += 10; 
+        displayWorld();
+        displayScoreP2();
+    }
+    else if(world[pacmanTwoPos.y][pacmanTwoPos.x] == 3){
+        world[pacmanTwoPos.y][pacmanTwoPos.x] = 0;
+        scoreTwo += 50; 
+        displayWorld();
+        displayScoreP2();
     }
 }
 
-//Mobility of pacman
 document.onkeydown = function(e){
-    if(e.keyCode == 37 && world[pacmanPos.y][pacmanPos.x -1] != 2 && pacmanPos.x > 0){
-        pacmanPos.x -= 1; 
-        pacman.style.backgroundImage= "url('pacman_left.gif')";
+    //Mobility of P1
+    if(e.keyCode == 37 && world[pacmanOnePos.y][pacmanOnePos.x -1] != 2 && pacmanOnePos.x > 0){
+        pacmanOnePos.x -= 1; 
+        pacmanOne.style.backgroundImage= "url('pacman_left.gif')";
     }
-    else if(e.keyCode == 39 && world[pacmanPos.y][pacmanPos.x + 1] != 2 && pacmanPos.x > 0){
-        pacmanPos.x += 1; 
-        pacman.style.backgroundImage= "url('pacman_right.gif')";
+    else if(e.keyCode == 39 && world[pacmanOnePos.y][pacmanOnePos.x + 1] != 2 && pacmanOnePos.x > 0){
+        pacmanOnePos.x += 1; 
+        pacmanOne.style.backgroundImage= "url('pacman_right.gif')";
     }
-    else if(e.keyCode == 38 && world[pacmanPos.y - 1][pacmanPos.x] != 2 && pacmanPos.y > 0){
-        pacmanPos.y -= 1; 
-        pacman.style.backgroundImage= "url('pacman_up.gif')";
+    else if(e.keyCode == 38 && world[pacmanOnePos.y - 1][pacmanOnePos.x] != 2 && pacmanOnePos.y > 0){
+        pacmanOnePos.y -= 1; 
+        pacmanOne.style.backgroundImage= "url('pacman_up.gif')";
     }
-    else if(e.keyCode == 40 && world[pacmanPos.y + 1][pacmanPos.x] != 2 && pacmanPos.y > 0){
-        pacmanPos.y += 1;  
-        pacman.style.backgroundImage= "url('pacman_down.gif')";
+    else if(e.keyCode == 40 && world[pacmanOnePos.y + 1][pacmanOnePos.x] != 2 && pacmanOnePos.y > 0){
+        pacmanOnePos.y += 1;  
+        pacmanOne.style.backgroundImage= "url('pacman_down.gif')";
     }
 
-    livesLost();
-    updateScore();
-    displayPacMan();
-    displayLives();
-}
-// Pacman losing - lives lost
-function livesLost(){
-    if (pacmanPos.y == ghostPos.y && pacmanPos.x == ghostPos.x){
-        lives--;
-        pacmanPos.x = 1
-        pacmanPos.y = 1;
+    //Mobility of P2
+    else if(e.keyCode == 65 && world[pacmanTwoPos.y][pacmanTwoPos.x -1] != 2 && pacmanTwoPos.x > 0){
+        pacmanTwoPos.x -= 1; 
+        pacmanTwo.style.backgroundImage= "url('pacman_left.gif')";
     }
-    if(lives == 0){
+    else if(e.keyCode == 68 && world[pacmanTwoPos.y][pacmanTwoPos.x + 1] != 2 && pacmanTwoPos.x > 0){
+        pacmanTwoPos.x += 1; 
+        pacmanTwo.style.backgroundImage= "url('pacman_right.gif')";
+    }
+    else if(e.keyCode== 87 && world[pacmanTwoPos.y - 1][pacmanTwoPos.x] != 2 && pacmanTwoPos.y > 0){
+        pacmanTwoPos.y -= 1; 
+        pacmanTwo.style.backgroundImage= "url('pacman_up.gif')";
+    }
+    else if(e.keyCode == 83 && world[pacmanTwoPos.y + 1][pacmanTwoPos.x] != 2 && pacmanTwoPos.y > 0){
+        pacmanTwoPos.y += 1;  
+        pacmanTwo.style.backgroundImage= "url('pacman_down.gif')";
+    }
+    livesLostOne();
+    updateScoreP1();
+    displayLivesP1();
+
+    livesLostTwo();
+    updateScoreP2();
+    displayLivesP2();
+
+    displayPacMan();
+}
+
+// Pacman losing - lives lost
+function livesLostOne(){
+    if (pacmanOnePos.y == ghostPos.y && pacmanOnePos.x == ghostPos.x){
+        livesOne--;
+        pacmanOnePos.x = 1
+        pacmanOnePos.y = 1;
+    }
+    if(livesOne == 0){
         document.getElementById("world").innerHTML = "<div id='refresh'>You lost! Try Again!</div>";
-        pacman.style.display="none";
+        pacmanOne.style.display="none";
+        ghost.style.display="none";
+        setTimeout(function(){
+            location.reload()
+        }, 3000);
+    }
+}
+
+function livesLostTwo(){
+    if (pacmanOnePos.y == ghostPos.y && pacmanOnePos.x == ghostPos.x){
+        livesTwo--;
+        pacmanOnePos.x = 1
+        pacmanOnePos.y = 1;
+    }
+    if(livesTwo == 0){
+        document.getElementById("world").innerHTML = "<div id='refresh'>You lost! Try Again!</div>";
+        pacmanOne.style.display="none";
         ghost.style.display="none";
         setTimeout(function(){
             location.reload()
@@ -162,8 +235,10 @@ function runGame(){
     displayWorld();
     displayPacMan();
     displayGhost();
-    displayScore();
-    displayLives();
+    displayScoreP1();
+    displayScoreP2();
+    displayLivesP1();
+    displayLivesP2();
 }
 
 runGame();
